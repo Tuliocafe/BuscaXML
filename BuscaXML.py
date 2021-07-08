@@ -24,7 +24,7 @@ def sequencia():
         print('Numero digitado errado')
         sequencia()
     print('')
-    print('Deve colocar o xml inicial e o final ex: "30 a 40"')
+    print('Deve colocar o NFCE inicial e o final ex: "30 a 40"')
     print('')
     numero = str(input('Qual sequencia (ex: xxx YYY) ? '))
     listanfcetemp = re.sub("[^0-9]", " ", numero).strip().split(' ')
@@ -45,7 +45,7 @@ def sequencia():
 
 
 def localizarxml():
-    serie = str(input('Digite a SERIE do XML ou pressione ENTER para 002: '))
+    serie = str(input('Digite a SERIE da NFCE ou pressione ENTER para 002: '))
     if serie == '':
         serie = '002'
 
@@ -61,10 +61,10 @@ def localizarxml():
 
     listanfce.clear()
     print('')
-    print("""Pode colocar varios XML de uma vez.
+    print("""Pode colocar varios NFCEs de uma vez.
 o sistema vai ignorar letras e buscar todos os numeros que foram inceridos""")
     print('')
-    numero = str(input('Quais XMLs ? '))
+    numero = str(input('Quais NFCEs ? '))
     listanfcetemp = re.sub("[^0-9]", " ", numero).strip().split(' ')
 
 
@@ -89,6 +89,7 @@ def copiararquivos(nfce):
     cont = 0
     for raiz, diretorios, arquivos in os.walk(caminho_procura):
         for arquivo in arquivos:
+            print(arquivo)
             for x in nfce:
                 if x in arquivo:
                     caminho_antigo = os.path.join(raiz, arquivo)
@@ -96,6 +97,7 @@ def copiararquivos(nfce):
                     mov_arquivonovo = os.path.join(caminho_novo, arquivo)
                     shutil.copy(caminho_antigo, mov_arquivonovo)
                     cont += 1
+
     print('')
     if cont == 0:
         print('=-'*20)
@@ -107,10 +109,13 @@ def copiararquivos(nfce):
 
 if os.path.exists(caminho_procura) == True:
     while True:
-        print("""********* MENU ******* By Tulio Cafe ******
-        1 Busca XML Individual
-        2 Busca XML em serie
-        3 Sair""")
+        print("""    ****************************** 
+    ******   BuscaXML  V 1.0 *****
+    ******************************
+    ** MENU **** By Tulio Cafe ***
+    1 Busca XML Individual
+    2 Busca XML em serie
+    3 Sair""")
 
         menu = int(input('Digite o numero: '))
 
