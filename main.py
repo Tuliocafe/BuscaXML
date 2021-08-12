@@ -21,17 +21,19 @@ except FileNotFoundError:
 print(f'local do arquivo é:   {caminho_busca}')
 
 
-
 if os.path.exists(caminho_busca) == True:
     while True:
+        teste_vazio = detectar_arquivo(caminho_copia)
         menuprincipal()
-        menu = int(input('Digite a Opção desejada: '))
         try:
+            menu = int(input('Digite a Opção desejada: '))
             if menu == 1:
                 localizarxml(caminho_busca, caminho_copia)
             elif menu == 2:
                 sequencia(caminho_busca, caminho_copia)
             elif menu == 3:
+                apagar_arquivo(teste_vazio, caminho_copia)
+            elif menu == 9:
                 break
             else:
                 print('')
