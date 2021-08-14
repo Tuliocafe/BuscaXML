@@ -1,11 +1,10 @@
 from manipulacao import *
-import os
+import PySimpleGUI as sg
 
 listanfce = []
 listanfcetemp = []
 caminho_busca = r'c:\Mafra\XML'
 caminho_copia = r'c:\Mafra\XML_Novo'
-
 
 try:
     manipulador = open('C:\Program Files (x86)\TronSolution\TSEmissorNFCe.ini', 'r')
@@ -18,33 +17,50 @@ try:
 except FileNotFoundError:
     pass
 
-print(f'local do arquivo é:   {caminho_busca}')
 
 
-if os.path.exists(caminho_busca) == True:
+teste_vazio = detectar_arquivo(caminho_copia)
+
+def sistema():
+    sg.theme('Dark Green 2')
+    layout = [
+        [sg.Text(' '*65 + f'Local da busca é:  {caminho_busca}')],
+        [sg.Text('Serie', size=(7, 0)), sg.Input(size=(3, 0), do_not_clear=False, key='serie')],
+        [sg.Radio('Busca por NFC-E', 'tipo_busca', size=(20, 0), default=True, key='tipo_busca1')],
+        [sg.Text('NFC-E', size=(7, 10)),
+         sg.Multiline(size=(50, 10), do_not_clear=False, enter_submits=True, key='nfce')],
+        [sg.Text('')],
+        [sg.Radio('Busca por Sequencia NFC-E', 'tipo_busca')],
+        [sg.Text('NFC-E de', size=(7, 0)), sg.Input(size=(10, 0), key='seq1'), sg.Text('a'),
+         sg.Input(size=(10, 0), key='seq2')],
+        [sg.Text('')],
+        [sg.Button('Executar', size=(15, 2)), sg.Text(' ', size=(16, 0)), sg.Button('Excluir arquivos'),
+         sg.Button('Sair', size=(5, 0))],
+        [sg.Output(size=(60, 20))],
+        [sg.Text('Desenvolvido por Tulio Cafe'.rjust(100))]]
+
+    janela = sg.Window("BuscaXML", layout)
+
     while True:
+        event, value = janela.read()
         teste_vazio = detectar_arquivo(caminho_copia)
-        menuprincipal()
-        try:
-            menu = int(input('Digite a Opção desejada: '))
-            if menu == 1:
-                localizarxml(caminho_busca, caminho_copia)
-            elif menu == 2:
-                sequencia(caminho_busca, caminho_copia)
-            elif menu == 3:
-                apagar_arquivo(teste_vazio, caminho_copia)
-            elif menu == 9:
-                break
-            else:
-                print('')
-                print('Digito invalido favor tentar novamente')
-                print('')
-        except ValueError:
-            print('')
-            print('Digito invalido! Favor tentar novamente')
-            print('')
-            pass
+        if event == 'Sair':
+            break
 
-else:
-    print(f'{caminho_busca} nao encontada')
-    exit = input('Pressione ENTER para fechar')
+        elif event == 'Executar' and value['tipo_busca1'] == True:
+            try:
+                localizarxml(caminho_busca, caminho_copia, value['serie'], value['nfce'])
+            except:
+                pass
+
+        elif event == 'Executar' and value['tipo_busca1'] == False:
+            sequencia(caminho_busca, caminho_copia, value['serie'], value['seq1'], value['seq2'])
+
+        elif event == 'Excluir arquivos':
+            sg.popup_yes_no("Em desenvolvimento")
+            # apagar_arquivo(teste_vazio, caminho_copia)
+
+        else:
+            janela.close()
+sistema()
+

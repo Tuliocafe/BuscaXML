@@ -20,8 +20,7 @@ def menuprincipal():
     """)
 
 
-def sequencia(caminho_busca, caminho_copia):
-    serie = str(input('Digite a SERIE do XML ou pressione ENTER para 002: '))
+def sequencia(caminho_busca, caminho_copia, serie, seq1, seq2):
     if serie == '':
         serie = '002'
 
@@ -30,16 +29,17 @@ def sequencia(caminho_busca, caminho_copia):
 
     elif len(serie) >= 4:
         print('Digito errado, tente novamente! ')
-        sequencia(caminho_busca, caminho_copia)
+
 
     else:
         print('Numero digitado errado')
-        sequencia(caminho_busca, caminho_copia)
 
-    print('')
-    print('Deve colocar o numero da NFCE inicial e o final ex: "30 a 40"')
-    print('')
-    numero = str(input('Qual sequencia (ex: 330 340) ? '))
+
+    # print('')
+    # print('Deve colocar o numero da NFCE inicial e o final ex: "30 a 40"')
+    # print('')
+
+    numero = str(seq1 + ' ' + seq2)
     listanfcetemp = re.sub("[^0-9]", " ", numero).strip().split(' ')
 
     for n in range(0, len(listanfcetemp)):
@@ -55,13 +55,13 @@ def sequencia(caminho_busca, caminho_copia):
         print('Digito é invalido!!!')
         print('Favor inserir inicio e o final da serie!!')
         print('')
-        sequencia(caminho_busca, caminho_copia)
+
     copiaararquivos(listanfce, caminho_busca, caminho_copia)
 
 
-def localizarxml(caminho_busca, caminho_copia):
+def localizarxml(caminho_busca, caminho_copia, serie, numero):
     """ Busca o XML pelo parametro informado no inicio"""
-    serie = str(input('Digite a SERIE da NFCE ou pressione ENTER para 002: '))
+    # serie = str(input('Digite a SERIE da NFCE ou pressione ENTER para 002: '))
     if serie == '':
         serie = '002'
 
@@ -70,18 +70,18 @@ def localizarxml(caminho_busca, caminho_copia):
 
     elif len(serie) >= 4:
         print('Digito errado, tente novamente! ')
-        localizarxml(caminho_busca, caminho_copia)
+
 
     else:
         print('Numero digitado errado')
-        localizarxml(caminho_busca, caminho_copia)
+
 
     listanfce.clear()
     print('')
-    print("""Pode colocar varios NFCEs de uma vez.
-o sistema vai ignorar letras e buscar todos os numeros que foram inceridos""")
+#     print("""Pode colocar varios NFCEs de uma vez.
+# o sistema vai ignorar letras e buscar todos os numeros que foram inceridos""")
     print('')
-    numero = str(input('Quais NFCEs ? '))
+    # numero = str(input('Quais NFCEs ? '))
     listanfcetemp = re.sub("[^0-9]", " ", numero).strip().split(' ')
 
     for n in range(0, len(listanfcetemp)):
@@ -155,12 +155,8 @@ def detectar_arquivo(caminho_copia):
 def apagar_arquivo(teste_vazio, caminho_copia):
     print("ESSE PROCEDIMENTO IRA APAGAR TODOS OS ARQUIVOS DA PASTA XML_novo.")
     try:
-        opcao = str(input('Deseja continuar (S/N): '))
-        if opcao[0] == 'n' or 'N':
-            pass
-        if opcao[0] == 's' or 'S':
-            for apagar in teste_vazio:
-                    os.remove(caminho_copia + "\\" + apagar)
+        for apagar in teste_vazio:
+            os.remove(caminho_copia + "\\" + apagar)
         else:
             print('Digito Invalido')
     except:
