@@ -61,6 +61,6 @@ def sistema():
             # apagar_arquivo(teste_vazio, caminho_copia)
 
         else:
-            janela.close()
+            break
 sistema()
 

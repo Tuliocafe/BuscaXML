@@ -4,7 +4,7 @@
 block_cipher = None
 
 
-a = Analysis(['main.pyw'],
+a = Analysis(['teste.py'],
              pathex=['C:\\Python\\Mafra\\BuscaXML'],
              binaries=[],
              datas=[],
@@ -24,12 +24,12 @@ exe = EXE(pyz,
           a.scripts, 
           [],
           exclude_binaries=True,
-          name='main',
+          name='teste',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
-          console=False,
+          console=True,
           disable_windowed_traceback=False,
           target_arch=None,
           codesign_identity=None,
@@ -41,4 +41,4 @@ coll = COLLECT(exe,
                strip=False,
                upx=True,
                upx_exclude=[],
-               name='main')
+               name='teste')
