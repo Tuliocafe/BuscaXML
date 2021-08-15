@@ -1,4 +1,7 @@
 # BuscaXML
 Sistema de Busca de XML
 
-Um Script que busca um arquivo **XML** de uma __NFCE__, localizada é copia dentrao de uma pasta especifica.
+Um Script que localiza arquivos **XML** de uma __NFCE__, é copia para uma pasta especifica.
+
+O Script surgiu para otimizar um processo que é feito na Mafra.
+
