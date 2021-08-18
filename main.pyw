@@ -24,6 +24,7 @@ teste_vazio = detectar_arquivo(caminho_copia)
 def sistema():
     sg.theme('Dark Green 2')
     layout = [
+        [sg.Titlebar('BuscaXML', icon=r'c:\mafra\CentralMafra\BuscaXML\xml.png')],
         [sg.Text(' '*65 + f'Local da busca é:  {caminho_busca}')],
         [sg.Text('Serie', size=(7, 0)), sg.Input(size=(3, 0), do_not_clear=False, key='serie')],
         [sg.Radio('Busca por NFC-E', 'tipo_busca', size=(20, 0), default=True, key='tipo_busca1')],
@@ -49,6 +50,7 @@ def sistema():
 
         elif event == 'Executar' and value['tipo_busca1'] == True:
             try:
+                print(value)
                 localizarxml(caminho_busca, caminho_copia, value['serie'], value['nfce'])
             except:
                 pass
@@ -63,4 +65,3 @@ def sistema():
         else:
             break
 sistema()
-
