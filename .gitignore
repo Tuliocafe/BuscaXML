@@ -1,2 +1,5 @@
 
 Teste.py
+.dist/
+.build/
+.venv/
