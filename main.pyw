@@ -2,7 +2,6 @@ from manipulacao import *
 import PySimpleGUI as sg
 
 listanfce = []
-listanfcetemp = []
 caminho_busca = r'c:\Mafra\XML'
 caminho_copia = r'c:\Mafra\XML_Novo'
 
@@ -17,9 +16,8 @@ try:
 except FileNotFoundError:
     pass
 
-
-
 teste_vazio = detectar_arquivo(caminho_copia)
+
 
 def sistema():
     sg.theme('Dark Green 2')
@@ -28,7 +26,7 @@ def sistema():
         [sg.Text(' '*65 + f'Local da busca é:  {caminho_busca}')],
         [sg.Text('Serie', size=(7, 0)), sg.Input(size=(3, 0), do_not_clear=False, key='serie')],
         [sg.Radio('Busca por NFC-E', 'tipo_busca', size=(20, 0), default=True, key='tipo_busca1')],
-        [sg.Text('NFC-E', size=(7, 10)),
+        [sg.Text('NFC-E', size=(7, 5)),
          sg.Multiline(size=(50, 10), do_not_clear=False, enter_submits=True, key='nfce')],
         [sg.Text('')],
         [sg.Radio('Busca por Sequencia NFC-E', 'tipo_busca')],
@@ -37,26 +35,29 @@ def sistema():
         [sg.Text('')],
         [sg.Button('Executar', size=(15, 2)), sg.Text(' ', size=(16, 0)), sg.Button('Excluir arquivos'),
          sg.Button('Sair', size=(5, 0))],
-        [sg.Output(size=(60, 20))],
+        [sg.Output(size=(60, 13))],
         [sg.Text('Desenvolvido por Tulio Cafe'.rjust(100))]]
 
     janela = sg.Window("BuscaXML", layout)
 
     while True:
+        # value = 0
         event, value = janela.read()
         teste_vazio = detectar_arquivo(caminho_copia)
         if event == 'Sair':
             break
 
-        elif event == 'Executar' and value['tipo_busca1'] == True:
+        elif event == 'Executar' and value['tipo_busca1'] is True:
             try:
                 print(value)
                 localizarxml(caminho_busca, caminho_copia, value['serie'], value['nfce'])
             except:
                 pass
 
-        elif event == 'Executar' and value['tipo_busca1'] == False:
+        elif event == 'Executar' and value['tipo_busca1'] is False:
+            print(value)
             sequencia(caminho_busca, caminho_copia, value['serie'], value['seq1'], value['seq2'])
+
 
         elif event == 'Excluir arquivos':
             sg.popup_yes_no("Em desenvolvimento")

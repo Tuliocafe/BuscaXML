@@ -5,41 +5,23 @@ from zipfile import *
 
 rangexml = []
 listanfce = []
-
-
-def menuprincipal():
-    print("""    ------------------------------ 
-    ------   BuscaXML  V 1.6 -----
-    ------------------------------
-    -- MENU ---- By Tulio Cafe ---
-
-    1 - Busca XML Individual
-    2 - Busca XML pela sequencia ex: (de x a y)
-    3 - Excluir arquivo da pasta XML_Novo
-    9 - Sair
-    """)
+listanfcetemp = []
 
 
 def sequencia(caminho_busca, caminho_copia, serie, seq1, seq2):
+    """ Busca o XML pela seguencia de um numero ao outro, (caminho da busca , caminho da copia do arquivo,
+     serie, primeiro numero da sequencia, ultimo numero da sequencia.)"""
+
     if serie == '':
         serie = '002'
-
     elif serie.isdigit() and len(serie) <= 3:
         serie = '0' * (3 - len(serie)) + serie
-
     elif len(serie) >= 4:
         print('Digito errado, tente novamente! ')
-
-
     else:
         print('Numero digitado errado')
 
-
-    # print('')
-    # print('Deve colocar o numero da NFCE inicial e o final ex: "30 a 40"')
-    # print('')
-
-    numero = str(seq1 + ' ' + seq2)
+    numero = str(str(seq1) + ' ' + str(seq2))
     listanfcetemp = re.sub("[^0-9]", " ", numero).strip().split(' ')
 
     for n in range(0, len(listanfcetemp)):
@@ -47,7 +29,7 @@ def sequencia(caminho_busca, caminho_copia, serie, seq1, seq2):
             rangexml.append(listanfcetemp[n])
 
     try:
-        for c in range(int(rangexml[0]), int(rangexml[1])):
+        for c in range(int(rangexml[0]), int(rangexml[1]) + 1):
             listanfce.append(str(serie + '0' * (9 - len(str(c))) + str(c)))
 
     except IndexError:
@@ -57,10 +39,14 @@ def sequencia(caminho_busca, caminho_copia, serie, seq1, seq2):
         print('')
 
     copiaararquivos(listanfce, caminho_busca, caminho_copia)
+    listanfcetemp.clear()
+    listanfce.clear()
+    rangexml.clear()
 
 
 def localizarxml(caminho_busca, caminho_copia, serie, numero):
-    """ Busca o XML pelo parametro informado no inicio"""
+    """ Busca o XML pelo parametro informado no inicio (caminho da busca , caminho da copia do arquivo,
+     serie e numero do NFCE)"""
     # serie = str(input('Digite a SERIE da NFCE ou pressione ENTER para 002: '))
     if serie == '':
         serie = '002'
@@ -71,23 +57,17 @@ def localizarxml(caminho_busca, caminho_copia, serie, numero):
     elif len(serie) >= 4:
         print('Digito errado, tente novamente! ')
 
-
     else:
         print('Numero digitado errado')
 
-
-    listanfce.clear()
-    print('')
-#     print("""Pode colocar varios NFCEs de uma vez.
-# o sistema vai ignorar letras e buscar todos os numeros que foram inceridos""")
-    print('')
-    # numero = str(input('Quais NFCEs ? '))
     listanfcetemp = re.sub("[^0-9]", " ", numero).strip().split(' ')
 
     for n in range(0, len(listanfcetemp)):
         if listanfcetemp[n].isdigit():
             listanfce.append(serie + '0' * (9 - len((listanfcetemp[n]))) + listanfcetemp[n])
     copiaararquivos(listanfce, caminho_busca, caminho_copia)
+    listanfce.clear()
+    listanfcetemp.clear()
 
 
 def copiaararquivos(nfce, caminho_busca, caminho_copia):
@@ -123,9 +103,7 @@ def copiaararquivos(nfce, caminho_busca, caminho_copia):
     else:
         for copia in lista_encontrado:
             shutil.copy(copia, copia.replace("XML", "XML_Novo"))
-
     print('')
-
     if encontrado == 0:
         print('=-'*20)
         print('      NENHUM XML encontrado')
@@ -152,12 +130,13 @@ def detectar_arquivo(caminho_copia):
     except:
         pass
 
+
 def apagar_arquivo(teste_vazio, caminho_copia):
     print("ESSE PROCEDIMENTO IRA APAGAR TODOS OS ARQUIVOS DA PASTA XML_novo.")
     try:
         for apagar in teste_vazio:
             os.remove(caminho_copia + "\\" + apagar)
-        else:
-            print('Digito Invalido')
+
     except:
+        print('Digito Invalido')
         pass
