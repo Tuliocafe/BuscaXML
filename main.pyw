@@ -4,6 +4,7 @@ import PySimpleGUI as sg
 listanfce = []
 caminho_busca = r'c:\Mafra\XML'
 caminho_copia = r'c:\Mafra\XML_Novo'
+yn = ''
 
 try:
     manipulador = open('C:\Program Files (x86)\TronSolution\TSEmissorNFCe.ini', 'r')
@@ -41,7 +42,6 @@ def sistema():
     janela = sg.Window("BuscaXML", layout)
 
     while True:
-        # value = 0
         event, value = janela.read()
         teste_vazio = detectar_arquivo(caminho_copia)
         if event == 'Sair':
@@ -60,9 +60,15 @@ def sistema():
 
 
         elif event == 'Excluir arquivos':
-            sg.popup_yes_no("Em desenvolvimento")
-            # apagar_arquivo(teste_vazio, caminho_copia)
+            popyn = sg.popup_yes_no("Deseja apagar TODOS os ARQUIVOS da pasta XML_novo",
+                                    title='Apagar arquivo')
+            if popyn == 'Yes':
+                print('yes')
+                apagar_arquivo(teste_vazio, caminho_copia)
+            else:
+                pass
 
         else:
             break
 sistema()
+

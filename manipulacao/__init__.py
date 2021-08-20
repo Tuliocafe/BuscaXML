@@ -47,7 +47,6 @@ def sequencia(caminho_busca, caminho_copia, serie, seq1, seq2):
 def localizarxml(caminho_busca, caminho_copia, serie, numero):
     """ Busca o XML pelo parametro informado no inicio (caminho da busca , caminho da copia do arquivo,
      serie e numero do NFCE)"""
-    # serie = str(input('Digite a SERIE da NFCE ou pressione ENTER para 002: '))
     if serie == '':
         serie = '002'
 
@@ -78,7 +77,6 @@ def copiaararquivos(nfce, caminho_busca, caminho_copia):
         os.mkdir(r'C:\Mafra\XML_Novo')
     except FileExistsError:
         pass
-
     encontrado = 0
     nao_encontrado = 0
     lista_nao_econtrado = []
@@ -132,7 +130,6 @@ def detectar_arquivo(caminho_copia):
 
 
 def apagar_arquivo(teste_vazio, caminho_copia):
-    print("ESSE PROCEDIMENTO IRA APAGAR TODOS OS ARQUIVOS DA PASTA XML_novo.")
     try:
         for apagar in teste_vazio:
             os.remove(caminho_copia + "\\" + apagar)
