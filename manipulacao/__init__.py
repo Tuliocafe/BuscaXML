@@ -3,6 +3,7 @@ import re
 import os
 from zipfile import *
 
+
 rangexml = []
 listanfce = []
 listanfcetemp = []
@@ -83,6 +84,9 @@ def copiaararquivos(nfce, caminho_busca, caminho_copia):
     lista_encontrado = []
     for x in nfce:
         for raiz, diretorios, arquivos in os.walk(caminho_busca):
+            if not diretorios:
+                print('acabou')
+                break
             for arquivo in arquivos:
                 if x in arquivo and '-nfe' in arquivo or x in arquivo and '-inu' in arquivo and '-ped' not in arquivo:
                     caminho_arquivo = os.path.join(raiz, arquivo)
