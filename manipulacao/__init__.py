@@ -2,7 +2,7 @@ import shutil
 import re
 import os
 from zipfile import *
-
+import xml.etree.ElementTree as et
 
 rangexml = []
 listanfce = []
@@ -85,7 +85,6 @@ def copiaararquivos(nfce, caminho_busca, caminho_copia):
     for x in nfce:
         for raiz, diretorios, arquivos in os.walk(caminho_busca):
             if not diretorios:
-                print('acabou')
                 break
             for arquivo in arquivos:
                 if x in arquivo and '-nfe' in arquivo or x in arquivo and '-inu' in arquivo and '-ped' not in arquivo:
@@ -141,3 +140,27 @@ def apagar_arquivo(teste_vazio, caminho_copia):
     except:
         print('Digito Invalido')
         pass
+
+
+def validar_arquivos(caminho):
+    for _, diretorios, arquivoXML in os.walk(caminho):
+
+        for arquivo in arquivoXML:
+            arquivoabsoluto = caminho + '\\' + arquivo
+            try:
+                tree = et.parse(arquivoabsoluto)
+                root = tree.getroot()
+                for child in root.iter():
+                    if child.tag == '{http://www.portalfiscal.inf.br/nfe}cNF':
+                        print(f' Verificando nota {child.text}.', end=' ')
+                    if child.tag == '{http://www.portalfiscal.inf.br/nfe}xJust':
+                        print('Nota nao validada')
+                    elif child.tag == '{http://www.portalfiscal.inf.br/nfe}xMotivo':
+                        print('Validada')
+            except:
+                pass
+
+
+
+        if not diretorios:
+            break
