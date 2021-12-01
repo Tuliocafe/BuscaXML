@@ -13,6 +13,10 @@ def sequencia(caminho_busca, caminho_copia, serie, seq1, seq2):
     """ Busca o XML pela seguencia de um numero ao outro, (caminho da busca , caminho da copia do arquivo,
      serie, primeiro numero da sequencia, ultimo numero da sequencia.)"""
 
+    print(serie)
+    print(seq1)
+    print(seq2)
+
     if serie == '':
         serie = '002'
     elif serie.isdigit() and len(serie) <= 3:
@@ -38,6 +42,7 @@ def sequencia(caminho_busca, caminho_copia, serie, seq1, seq2):
         print('Digito é invalido!!!')
         print('Favor inserir inicio e o final da serie!!')
         print('')
+
 
     copiaararquivos(listanfce, caminho_busca, caminho_copia)
     listanfcetemp.clear()
@@ -65,55 +70,64 @@ def localizarxml(caminho_busca, caminho_copia, serie, numero):
     for n in range(0, len(listanfcetemp)):
         if listanfcetemp[n].isdigit():
             listanfce.append(serie + '0' * (9 - len((listanfcetemp[n]))) + listanfcetemp[n])
+            print(listanfce)
     copiaararquivos(listanfce, caminho_busca, caminho_copia)
     listanfce.clear()
     listanfcetemp.clear()
 
 
 def copiaararquivos(nfce, caminho_busca, caminho_copia):
-    for item in nfce:
-        print(f'Procurando item {item}')
-    print('')
-    try:
-        os.mkdir(r'C:\Mafra\XML_Novo')
-    except FileExistsError:
-        pass
-    encontrado = 0
-    nao_encontrado = 0
-    lista_nao_econtrado = []
-    lista_encontrado = []
-    for x in nfce:
-        for raiz, diretorios, arquivos in os.walk(caminho_busca):
-            if not diretorios:
-                break
-            for arquivo in arquivos:
-                if x in arquivo and '-nfe' in arquivo or x in arquivo and '-inu' in arquivo and '-ped' not in arquivo:
-                    caminho_arquivo = os.path.join(raiz, arquivo)
-                    print(f' {encontrado +1} -  XML Encontrados: {caminho_arquivo}  ')
-                    encontrado += 1
-                    lista_encontrado.append(caminho_arquivo)
-            if nao_encontrado != encontrado:
-                nao_encontrado = encontrado
-            else:
-                lista_nao_econtrado.append(x)
-
-    if len(lista_encontrado) >= 5:
-        with ZipFile(caminho_copia+r"\XMLfaltante.rar", "w") as rar:
-            for nome in lista_encontrado:
-                rar.write(nome)
+    if '-nfe' in nfce[0] or '-inu' in nfce[0]:
+        for nome in nfce:
+            print(caminho_busca + nome)
+        if len(nfce) >= 5:
+            with ZipFile(caminho_copia + '\\' + r'XMLfaltante.rar', "w") as rar:
+                for nome in nfce:
+                    rar.write(caminho_busca + nome)
+                    os.startfile(caminho_copia)
+        else:
+            for copia in nfce:
+                shutil.copy(caminho_busca + copia, caminho_copia)
+                os.startfile(caminho_copia)
     else:
-        for copia in lista_encontrado:
-            shutil.copy(copia, copia.replace("XML", "XML_Novo"))
-    print('')
-    if encontrado == 0:
-        print('=-'*20)
-        print('      NENHUM XML encontrado')
-        print('=-' * 20)
-    if encontrado != 0:
-        os.startfile(caminho_copia)
-        print('Item Não encontrados: ')
-        for num, item in enumerate(lista_nao_econtrado, start=1):
-            print(f'{num} - {item}')
+        encontrado = 0
+        nao_encontrado = 0
+        lista_nao_econtrado = []
+        lista_encontrado = []
+        for item in nfce:
+            for raiz, diretorios, arquivos in os.walk(caminho_busca):
+                if not diretorios:
+                    break
+                for arquivo in arquivos:
+                    if item in arquivo and '-nfe' in arquivo or\
+                            item in arquivo and '-inu' in arquivo and '-ped' not in arquivo:
+                        caminho_arquivo = os.path.join(raiz, arquivo)
+                        print(f' {encontrado +1} -  XML Encontrados: {caminho_arquivo}  ')
+                        encontrado += 1
+                        lista_encontrado.append(caminho_arquivo)
+                if nao_encontrado != encontrado:
+                    nao_encontrado = encontrado
+                else:
+                    lista_nao_econtrado.append(item)
+
+        if len(lista_encontrado) >= 5:
+            with ZipFile(caminho_copia + r"\XMLfaltante.rar", "w") as rar:
+                for nome in lista_encontrado:
+                    rar.write(nome)
+        else:
+            print(lista_encontrado)
+            for copia in lista_encontrado:
+                shutil.copy(copia, caminho_copia)
+        print('')
+        if encontrado == 0:
+            print('=-'*20)
+            print('      NENHUM XML encontrado')
+            print('=-' * 20)
+        if encontrado != 0:
+            os.startfile(caminho_copia)
+            print('Item Não encontrados: ')
+            for num, item in enumerate(lista_nao_econtrado, start=1):
+                print(f'{num} - {item}')
 
 
 def detectar_arquivo(caminho_copia):
@@ -126,7 +140,7 @@ def detectar_arquivo(caminho_copia):
                 if os.path.isdir(caminho_copia + "\\" + verificar_arquivo):
                     pass
                 else:
-                    print('Foi detectado arquivos na pasta XML_Novo.')
+                    print('Foi detectado arquivos na pasta XML_Separado.')
                     return teste_vazio
     except:
         pass
@@ -159,8 +173,82 @@ def validar_arquivos(caminho):
                         print('Validada')
             except:
                 pass
-
-
-
         if not diretorios:
             break
+
+def gerarxml(caminho_busca, caminho_copia, data):
+    listaXML = [[], [], [], []]
+    naoencontrado = []
+    print(caminho_busca)
+    for raiz, diretorios, arquivos in os.walk(caminho_busca):
+        print(diretorios)
+        if not diretorios:
+            break
+        for arquivo in arquivos:
+            if arquivo[2:6] == data and '-nfe' in arquivo or \
+                    arquivo[2:6] == data and '-inu' in arquivo and '-ped' not in arquivo:
+                    if not listaXML[0]:
+                        listaXML[0].append(arquivo)
+                    elif arquivo[22:25] == listaXML[0][0][22:25]:
+                        listaXML[0].append(arquivo)
+                    elif arquivo[22:25] != listaXML[0][0][22:25] and not listaXML[1]:
+                        listaXML[1].append(arquivo)
+                    elif arquivo[22:25] == listaXML[1][0][22:25]:
+                        listaXML[1].append(arquivo)
+                    elif arquivo[22:25] != listaXML[1][0][22:25] and not listaXML[2]:
+                        listaXML[2].append(arquivo)
+                    elif arquivo[22:25] == listaXML[2][0][22:25]:
+                        listaXML[2].append(arquivo)
+                    elif arquivo[22:25] != listaXML[2][0][22:25] and not listaXML[3]:
+                        listaXML[3].append(arquivo)
+                    elif arquivo[22:25] == listaXML[3][0][22:25]:
+                        listaXML[3].append(arquivo)
+    # listaXML[0].sort()
+    print(listaXML[0][0][25:34])
+    xmlinicial = listaXML[0][0][22:34]
+    xmlfinal = listaXML[0][-1][22:34]
+    print(xmlinicial)
+    print(xmlfinal)
+    contagem = 0
+    acertou = False
+    for cont in range(int(xmlinicial), int(xmlfinal) + 1):
+        for xml in listaXML[0]:
+            if str(cont) in xml:
+                acertou = True
+                break
+        if acertou == True:
+            print(f'{cont} Acertou')
+            acertou = False
+        else:
+            # naoencontrado.append()
+            print(f'{cont} Tem Esse não')
+    print(naoencontrado)
+    copiaararquivos(listaXML[0], caminho_busca, caminho_copia)
+
+
+    # for cont, listaXML[contagem] in enumerate(listaXML[contagem]):
+    #     print(cont, listaXML[contagem])
+    #     # print(listaXML[0])
+    #     # print(listaXML[0][25:34])
+    #     # print(f' Arquivo {cont}, {listaXML[0]}  {int(xmlinicial)}')
+    #     if int(listaXML[contagem][25:34]) == int(xmlinicial):
+    #         print('acertou')
+    #     try:
+    #         if listaXML[contagem] == len(listaXML[contagem] [-1]):
+    #             contagem += 1
+    #     except:
+    #         pass
+
+
+
+    xmlfinal = listaXML[0][-1]
+
+
+    print(xmlinicial[22:34])
+    print(xmlfinal[22:34])
+    serie = xmlinicial[22:25]
+
+    print(listaXML[0][0])
+
+    # sequencia(caminho_busca, caminho_copia, serie, xmlinicial[25:34], xmlfinal[25:34])
+
