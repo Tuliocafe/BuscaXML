@@ -35,10 +35,6 @@ except FileExistsError:
 except FileNotFoundError:
     pass
 
-
-teste_vazio = detectar_arquivo(caminho_copia)
-
-
 def sistema():
     menu_def = [['Arquivo', ['faznada', 'faznada2', 'Sair', ]],
                 ['Editar', ['nadinha', ['soteste', 'jura', ], 'mada'], ],
@@ -84,7 +80,6 @@ def sistema():
             sequencia(caminho_busca, caminho_copia, value['serie'], value['seq1'], value['seq2'])
 
         elif event == 'Checar Validade':
-            # print('em teste')
             validar_arquivos(caminho_copia)
 
         elif event == 'Separar XML':
@@ -92,9 +87,7 @@ def sistema():
             popyn = sg.popup_yes_no(f' Gerar notas de: {data.month -1} / {data.year} ?',
                                     title='Apagar arquivo')
             if popyn == 'Yes':
-                data = '2107'
                 gerarxml(caminho_busca, caminho_copia, data)
-                print('Funcao Em manutencao')
 
             else:
                 pass
@@ -103,8 +96,6 @@ def sistema():
             sg.popup(versao, title='Status', background_color='#458114')
 
         elif event == 'Excluir XML':
-            data = '2107'
-            gerarxml(caminho_busca, caminho_copia, data)
             popyn = sg.popup_yes_no("Deseja apagar TODOS os ARQUIVOS da pasta XML_novo",
                                     title='Apagar arquivo')
             if popyn == 'Yes':

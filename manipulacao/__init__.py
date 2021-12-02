@@ -13,10 +13,6 @@ def sequencia(caminho_busca, caminho_copia, serie, seq1, seq2):
     """ Busca o XML pela seguencia de um numero ao outro, (caminho da busca , caminho da copia do arquivo,
      serie, primeiro numero da sequencia, ultimo numero da sequencia.)"""
 
-    print(serie)
-    print(seq1)
-    print(seq2)
-
     if serie == '':
         serie = '002'
     elif serie.isdigit() and len(serie) <= 3:
@@ -78,16 +74,16 @@ def localizarxml(caminho_busca, caminho_copia, serie, numero):
 
 def copiaararquivos(nfce, caminho_busca, caminho_copia):
     if '-nfe' in nfce[0] or '-inu' in nfce[0]:
-        for nome in nfce:
-            print(caminho_busca + nome)
         if len(nfce) >= 5:
             with ZipFile(caminho_copia + '\\' + r'XMLfaltante.rar', "w") as rar:
                 for nome in nfce:
-                    rar.write(caminho_busca + nome)
+                    rar.write(caminho_busca +'\\' + nome)
                     os.startfile(caminho_copia)
         else:
+            print(caminho_busca,' ',caminho_copia)
             for copia in nfce:
-                shutil.copy(caminho_busca + copia, caminho_copia)
+                print(caminho_busca + '\\' + copia, caminho_copia)
+                shutil.copy(caminho_busca +'\\'+ copia, caminho_copia)
                 os.startfile(caminho_copia)
     else:
         encontrado = 0
@@ -115,7 +111,6 @@ def copiaararquivos(nfce, caminho_busca, caminho_copia):
                 for nome in lista_encontrado:
                     rar.write(nome)
         else:
-            print(lista_encontrado)
             for copia in lista_encontrado:
                 shutil.copy(copia, caminho_copia)
         print('')
@@ -177,16 +172,15 @@ def validar_arquivos(caminho):
             break
 
 def gerarxml(caminho_busca, caminho_copia, data):
+    dataarquivo = data.month - 1
+    dataarquivo = str(data.year)[2:4] + str(dataarquivo)
     listaXML = [[], [], [], []]
-    naoencontrado = []
-    print(caminho_busca)
     for raiz, diretorios, arquivos in os.walk(caminho_busca):
-        print(diretorios)
         if not diretorios:
             break
         for arquivo in arquivos:
-            if arquivo[2:6] == data and '-nfe' in arquivo or \
-                    arquivo[2:6] == data and '-inu' in arquivo and '-ped' not in arquivo:
+            if arquivo[2:6] == dataarquivo and '-nfe' in arquivo or \
+                    arquivo[2:6] == dataarquivo and '-inu' in arquivo and '-ped' not in arquivo:
                     if not listaXML[0]:
                         listaXML[0].append(arquivo)
                     elif arquivo[22:25] == listaXML[0][0][22:25]:
@@ -203,27 +197,28 @@ def gerarxml(caminho_busca, caminho_copia, data):
                         listaXML[3].append(arquivo)
                     elif arquivo[22:25] == listaXML[3][0][22:25]:
                         listaXML[3].append(arquivo)
-    # listaXML[0].sort()
-    print(listaXML[0][0][25:34])
-    xmlinicial = listaXML[0][0][22:34]
-    xmlfinal = listaXML[0][-1][22:34]
-    print(xmlinicial)
-    print(xmlfinal)
-    contagem = 0
-    acertou = False
-    for cont in range(int(xmlinicial), int(xmlfinal) + 1):
-        for xml in listaXML[0]:
-            if str(cont) in xml:
-                acertou = True
-                break
-        if acertou == True:
-            print(f'{cont} Acertou')
-            acertou = False
-        else:
-            # naoencontrado.append()
-            print(f'{cont} Tem Esse não')
-    print(naoencontrado)
-    copiaararquivos(listaXML[0], caminho_busca, caminho_copia)
+    if not listaXML[0]:
+        print('Nenhuma item encontrado')
+
+
+    else:
+        # print(listaXML[0][0][25:34])
+        xmlinicial = listaXML[0][0][22:34]
+        xmlfinal = listaXML[0][-1][22:34]
+        print(f'Sequencia de {xmlinicial} a {xmlfinal}')
+        acertou = False
+        for cont in range(int(xmlinicial), int(xmlfinal) + 1):
+            for xml in listaXML[0]:
+                if str(cont) in xml:
+                    acertou = True
+                    break
+            if acertou == True:
+                print(f'Serie {str(cont)[0]}   Nota {str(cont)[1:]} Encontrado')
+                acertou = False
+            else:
+                print(f'Serie {str(cont)[0]}   Nota {str(cont)[1:]} *NAO* Encontrado')
+
+        copiaararquivos(listaXML[0], caminho_busca, caminho_copia)
 
 
     # for cont, listaXML[contagem] in enumerate(listaXML[contagem]):
@@ -241,14 +236,8 @@ def gerarxml(caminho_busca, caminho_copia, data):
 
 
 
-    xmlfinal = listaXML[0][-1]
 
 
-    print(xmlinicial[22:34])
-    print(xmlfinal[22:34])
-    serie = xmlinicial[22:25]
 
-    print(listaXML[0][0])
 
-    # sequencia(caminho_busca, caminho_copia, serie, xmlinicial[25:34], xmlfinal[25:34])
 
