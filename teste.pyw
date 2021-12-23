@@ -1,0 +1,1 @@
+# para criar exe:  pyinstaller.exe --onefile --windowed --icon=BuscaXML.ico BuscaXML.pyw
